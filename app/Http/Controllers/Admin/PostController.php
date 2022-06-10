@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Tag;
 
 use Illuminate\Support\Str;
 
@@ -32,7 +33,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::all();
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -64,7 +66,13 @@ class PostController extends Controller
 
         $newPost->fill($data);
         $newPost->slug = Str::slug($newPost->title, '-');
+
         $newPost->save();
+
+        if (array_key_exists('tags', $data)) {
+            $newPost->tags()->sync($data['tags']);
+        }
+
 
         return redirect()->route('admin.posts.show', $newPost)->with('message', "$newPost->title è stato creato con successo.");
     }
@@ -77,8 +85,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $categories = Category::all();
-        return view('admin.posts.show', compact('post', 'categories'));
+        return view('admin.posts.show', compact('post'));
     }
 
     /**
@@ -90,7 +97,11 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+
+        $post_tags_id = $post->tags->pluck('id')->toArray();
+
+        return view('admin.posts.edit', compact('post', 'categories', 'tags', 'post_tags_id'));
     }
 
     /**
@@ -117,10 +128,18 @@ class PostController extends Controller
         );
         
         $data = $request->all();
-        
         $post->slug = Str::slug($post->title, '-');
-
         $post->update($data);
+
+        // if (!array_key_exists('tags', $data)) {
+        //     $post->tags()->detach();
+        // } else {
+        //     $post->tags()->sync($data['tags']);
+        // }
+
+        if (array_key_exists('tags', $data)){
+            $post->tags()->sync($data['tags']);
+        }
         
         return redirect()->route('admin.posts.show', $post)->with('message', "$post->title è stato aggiornato con successo.");
     }

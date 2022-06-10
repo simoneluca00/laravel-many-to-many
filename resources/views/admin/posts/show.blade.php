@@ -21,6 +21,16 @@
             <p class="mb-0">
                 {{$post->content}}
             </p>
+
+            <div>
+                @forelse ($post->tags as $tag)
+                 <h4 class="badge text-light mx-1" style="background-color: {{$tag->color}};">#{{$tag->label}}</h4>
+                @empty
+                    <p>
+                        Nessun tag associato a questo post
+                    </p>
+                @endforelse
+            </div>
         </div>
 
         <div class="d-flex justify-content-center align-self-end">

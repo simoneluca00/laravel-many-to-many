@@ -35,6 +35,24 @@
                    @endforeach
                 </select>
             </div>
+
+            <div class="form-group">
+                <h4>Seleziona i tag da abbinare al post:</h4>
+
+                @foreach ($tags as $tag)    
+                    <div class="form-check form-check-inline">
+                        {{-- passando "tags[]" nell'attributo 'name' è in grado di generare un array con tutti i valori selezionati(id) --}}
+                        <input 
+                            class="form-check-input" type="checkbox" 
+                            id="tag-{{$tag->id}}" name="tags[]" 
+                            value="{{$tag->id}}"
+                            @if( in_array($tag->id, old('tags', $post_tags_id) ) ) checked @endif
+                        >
+                        <label class="form-check-label" for="tag-{{$tag->id}}">{{$tag->label}}</label>
+                    </div>
+                @endforeach
+            </div>
+
             <div class="form-group">
                 <label for="content">Modifica la descrizione del post:</label>
                 <textarea class="form-control" id="content" name="content" rows="3" placeholder="Descrizione" required>{{old('content', $post->content)}}</textarea>

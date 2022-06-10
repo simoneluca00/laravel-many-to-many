@@ -104,7 +104,7 @@ eval("var deleteForms = document.querySelectorAll('.deleteForm');\nconsole.log(d
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/simonelucazaino/Desktop/Repository-esercizi/Laravel/laravel-one-to-many/resources/js/deleteConfirm.js */"./resources/js/deleteConfirm.js");
+module.exports = __webpack_require__(/*! /Users/simonelucazaino/Desktop/Repository-esercizi/Laravel/laravel-many-to-many/resources/js/deleteConfirm.js */"./resources/js/deleteConfirm.js");
 
 
 /***/ })
