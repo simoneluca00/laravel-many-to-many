@@ -10,7 +10,7 @@
             EDIT <a href="{{route('admin.posts.show', $post->id)}}">{{$post->title}}</a>
         </h2>
 
-        <form action="{{route('admin.posts.update', $post->id)}}" method="POST">
+        <form action="{{route('admin.posts.update', $post->id)}}" method="POST" enctype="multipart/form-data">
             @method('PUT')
 
             @csrf
@@ -57,9 +57,10 @@
                 <label for="content">Modifica la descrizione del post:</label>
                 <textarea class="form-control" id="content" name="content" rows="3" placeholder="Descrizione" required>{{old('content', $post->content)}}</textarea>
             </div>
+            
             <div class="form-group">
-                <label for="image">Modifica l'URL dell'immagine:</label>
-                <input type="text" name="image" class="form-control" id="image" placeholder="https://example.com" value="{{old('image', $post->image)}}" pattern="https://.*" maxlength="255" required>
+                <label for="image">Inserisci l'immagine:</label>
+                <input type="file" class="form-control-file" id="image" name="image">
             </div>
 
             <button type="submit" class="btn btn-primary">Modifica post</button>

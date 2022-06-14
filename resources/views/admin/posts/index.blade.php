@@ -25,21 +25,22 @@
                 @forelse ($posts as $post)
                     <tr>
                         <th scope="row" class="align-middle">
-                            <img src="{{$post->image}}" alt="img di {{$post->title}}" width="50px">
+                            {{-- <img src="{{$post->image}}" alt="img di {{$post->title}}" width="50px"> --}}
+                            <img src="{{asset("storage/$post->image")}}" alt="img di {{$post->title}}" width="50px">
                         </th>
                         <td class="align-middle">
                             {{$post->title}}
                         </td>
                         <td class="align-middle">
                             {{-- {{dd($post->Category)}} --}}
-                               @if ($post->Category)
-                                    <span class="badge badge-pill badge-{{$post->Category->color}}">
-                                       {{$post->Category->label}}
-                                    </span>
-                                @else
-                                    <span class="text-center"> - </span>
-                               @endif
-                            </td>
+                            @if ($post->Category)
+                                <span class="badge badge-pill badge-{{$post->Category->color}}">
+                                    {{$post->Category->label}}
+                                </span>
+                            @else
+                                <span class="text-center"> - </span>
+                            @endif
+                        </td>
                         <td class="align-middle">
                             <p>{{$post->content}}</p>
                         </td>

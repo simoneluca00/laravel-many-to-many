@@ -6,7 +6,7 @@
 
     <div class="container mt-4 d-flex justify-content-center align-items-center">
         <div class="mr-5">
-            <img src="{{$post->image}}" alt="{{$post->title}}" width="250">
+            <img src="{{ asset( "storage/$post->image" ) }}" alt="{{$post->title}}" width="250">
     
             <h2>
                 {{$post->title}}

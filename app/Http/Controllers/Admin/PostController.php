@@ -11,6 +11,8 @@ use App\Models\Tag;
 
 use Illuminate\Support\Str;
 
+use Illuminate\Support\Facades\Storage;
+
 class PostController extends Controller
 {
     /**
@@ -49,20 +51,28 @@ class PostController extends Controller
             [
                 'title'=> 'required|max:255|unique:posts',
                 'content'=> 'required',
-                'image'=> 'required|url|max:255|unique:posts',
+                'image'=> 'required',
+                
             ],
 
             [
                 'title.required' => "Il titolo è obbligatorio...",
                 'content.required' => "La descrizione è obbligatoria...",
-                'image.required' => "L'url dell'immagine è obbligatorio...",
+                'image.required' => "L'immagine è obbligatoria...",
                 'title.unique' => "Modifica il titolo, quello scelto è già esistente...", 
-                'image.unique' => "Modifica l'url dell'immagine, quello scelto è già esistente..." 
             ]
         );
 
         $data = $request->all();
         $newPost = new Post();
+
+        if (array_key_exists('image', $data)) {
+        
+            $image_url = Storage::put('post_images', $data['image']);
+    
+            $data['image'] = $image_url;
+            
+        }
 
         $newPost->fill($data);
         $newPost->slug = Str::slug($newPost->title, '-');
@@ -117,25 +127,31 @@ class PostController extends Controller
             [
                 'title'=> 'required|max:255',
                 'content'=> 'required',
-                'image'=> 'required|url|max:255',
+                'image'=> 'required',
             ],
 
             [
                 'title.required' => "Il titolo è obbligatorio...",
                 'content.required' => "La descrizione è obbligatoria...",
-                'image.required' => "L'url dell'immagine è obbligatorio...",
+                'image.required' => "L'immagine è obbligatoria...",
             ]
         );
         
         $data = $request->all();
         $post->slug = Str::slug($post->title, '-');
-        $post->update($data);
 
-        // if (!array_key_exists('tags', $data)) {
-        //     $post->tags()->detach();
-        // } else {
-        //     $post->tags()->sync($data['tags']);
-        // }
+        if (array_key_exists('image', $data)) {
+
+            if ($post->image) {
+                Storage::delete($post->image);
+            }
+            
+            $image_url = Storage::put('post_images', $data['image']);
+    
+            $data['image'] = $image_url;
+        }
+
+        $post->update($data);
 
         if (array_key_exists('tags', $data)){
             $post->tags()->sync($data['tags']);

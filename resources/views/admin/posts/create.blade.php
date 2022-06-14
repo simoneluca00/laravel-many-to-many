@@ -6,7 +6,7 @@
 
     <div class="container">
 
-        <form action="{{route('admin.posts.store')}}" method="post">
+        <form action="{{route('admin.posts.store')}}" method="post" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group my-4">
@@ -51,9 +51,10 @@
                 <label for="content">Inserisci la descrizione del post:</label>
                 <textarea class="form-control" id="content" name="content" rows="3" placeholder="Descrizione" required>{{old('content')}}</textarea>
             </div>
-            <div class="form-group my-4">
-                <label for="image">Inserisci l'URL dell'immagine:</label>
-                <input type="text" name="image" class="form-control" id="image" placeholder="https://example.com" value="{{old('image')}}" pattern="https://.*" maxlength="255" required>
+            
+            <div class="form-group">
+                <label for="image">Inserisci l'immagine:</label>
+                <input type="file" class="form-control-file" id="image" name="image">
             </div>
 
             <div class="mt-5 text-center">
