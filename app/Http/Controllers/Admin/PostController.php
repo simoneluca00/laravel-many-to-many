@@ -13,6 +13,13 @@ use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\CreatePostMail;
+
+
 class PostController extends Controller
 {
     /**
@@ -64,6 +71,9 @@ class PostController extends Controller
         );
 
         $data = $request->all();
+
+        $user = Auth::user();
+
         $newPost = new Post();
 
         if (array_key_exists('image', $data)) {
@@ -82,6 +92,9 @@ class PostController extends Controller
         if (array_key_exists('tags', $data)) {
             $newPost->tags()->sync($data['tags']);
         }
+
+        $mail = new CreatePostMail($newPost);
+        Mail::to($user->email)->send($mail);
 
 
         return redirect()->route('admin.posts.show', $newPost)->with('message', "$newPost->title è stato creato con successo.");
